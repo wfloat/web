@@ -3,7 +3,5 @@ services:
   web:
     # Overrides default command so the development container keeps running until the user disconnects
     command: /bin/sh -c "while sleep 1000; do :; done"
-    volumes:
-      - .:/app
-volumes:
-  notused:
+    # volumes:
+    #   - .:/app
