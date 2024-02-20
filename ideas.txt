@@ -1,0 +1,7 @@
+Cool mountain waveform thing in the background
+https://github.com/wfloat/web.git
+
+Awesome fluid simulation that kind of looks like a lava lamp or fire or water color
+https://paveldogreat.github.io/WebGL-Fluid-Simulation/
+
+I like the idea of

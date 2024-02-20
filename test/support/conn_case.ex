@@ -1,4 +1,4 @@
-defmodule TodoHtmxWeb.ConnCase do
+defmodule WfloatWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule TodoHtmxWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use TodoHtmxWeb.ConnCase, async: true`, although
+  by setting `use WfloatWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -19,15 +19,15 @@ defmodule TodoHtmxWeb.ConnCase do
 
   using do
     quote do
+      # The default endpoint for testing
+      @endpoint WfloatWeb.Endpoint
+
+      use WfloatWeb, :verified_routes
+
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import TodoHtmxWeb.ConnCase
-
-      alias TodoHtmxWeb.Router.Helpers, as: Routes
-
-      # The default endpoint for testing
-      @endpoint TodoHtmxWeb.Endpoint
+      import WfloatWeb.ConnCase
     end
   end
 
