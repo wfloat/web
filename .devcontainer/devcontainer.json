@@ -4,14 +4,15 @@
   "name": "Wfloat Web Container",
   "dockerComposeFile": ["../docker-compose.yaml", "docker-compose.dev.yaml"],
   "service": "web",
-  "remoteUser": "nobody",
-  "workspaceFolder": "/app",
+  "remoteUser": "containeruser",
+  // "containerUser": "nobody",
+  // "updateRemoteUserUID": true,
+  "workspaceFolder": "/usr/src/web",
   "shutdownAction": "stopCompose",
   "customizations": {
     "vscode": {
       "extensions": [
         "esbenp.prettier-vscode",
-        "Prisma.prisma",
         "streetsidesoftware.code-spell-checker",
         "JakeBecker.elixir-ls",
         "phoenixframework.phoenix",
