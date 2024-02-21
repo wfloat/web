@@ -93,16 +93,10 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-WORKDIR "/web"
-RUN chown $USERNAME /web
-
-# set runner ENV
-ENV MIX_ENV="prod"
-
 # Only copy the final release from the build stage
-COPY --from=builder --chown=$USERNAME:root /web/_build/${MIX_ENV}/rel/wfloat ./
+COPY --from=builder --chown=$USERNAME:root /usr/src/web/_build/${MIX_ENV}/rel/wfloat ./
 
-USER $USERNAME
+USER containeruser
 
 # # If using an environment that doesn't automatically reap zombie processes, it is
 # # advised to add an init process such as tini via `apt-get install`
