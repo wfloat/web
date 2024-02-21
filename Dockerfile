@@ -1,3 +1,6 @@
+# Based off the container found here https://hexdocs.pm/phoenix/releases.html#containers but with the separate
+# builder and runner stages removed so the production container and devcontainer can be shared
+
 # Find eligible builder and runner images on Docker Hub. We use Ubuntu/Debian
 # instead of Alpine to avoid DNS resolution issues in production.
 #
@@ -15,10 +18,7 @@ ARG ELIXIR_VERSION=1.15.7
 ARG OTP_VERSION=26.2.2
 ARG DEBIAN_VERSION=bullseye-20240130-slim
 
-ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}"
-ARG RUNNER_IMAGE="debian:${DEBIAN_VERSION}"
-
-FROM ${BUILDER_IMAGE} as builder
+FROM hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}
 
 ARG USERNAME=containeruser
 ARG USER_UID=1000
@@ -26,14 +26,12 @@ ARG USER_GID=$USER_UID
 
 # Create the user
 RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME 
-    # \
-    #
-    # # [Optional] Add sudo support. Omit if you don't need to install software after connecting.
-    # && apt-get update \
-    # && apt-get install -y sudo \
-    # && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    # && chmod 0440 /etc/sudoers.d/$USERNAME
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    # [Optional] Add sudo support. Omit if you don't need to install software after connecting.
+    && apt-get update \
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
 
 # install build dependencies
 RUN apt-get update -y && apt-get install -y build-essential git \
@@ -78,10 +76,6 @@ COPY config/runtime.exs config/
 COPY rel rel
 RUN mix release
 
-# start a new build stage so that the final image will only contain
-# the compiled release and other runtime necessities
-FROM ${RUNNER_IMAGE}
-
 RUN apt-get update -y && \
   apt-get install -y libstdc++6 openssl libncurses5 locales ca-certificates \
   && apt-get clean && rm -f /var/lib/apt/lists/*_*
@@ -93,9 +87,6 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-# Only copy the final release from the build stage
-COPY --from=builder --chown=$USERNAME:root /usr/src/web/_build/${MIX_ENV}/rel/wfloat ./
-
 USER containeruser
 
 # # If using an environment that doesn't automatically reap zombie processes, it is
@@ -103,6 +94,5 @@ USER containeruser
 # # above and adding an entrympoint. See https://github.com/krallin/tini for details
 # # ENTRYPOINT ["/tini", "--"]
 
-# CMD ["/app/bin/server"]
-CMD ["/bin/bash", "-c", "while sleep 1000; do :; done"]
+CMD ["/usr/src/web/_build/prod/rel/wfloat/bin/server"]
 

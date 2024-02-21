@@ -6,5 +6,5 @@ services:
     volumes:
       - .:/usr/src/web
       - ../.git/:/usr/src/.git/ # Ensure git works in the devcontainer since this is a submodule
-      - /web/_build
-      - /web/deps
+      - /usr/src/web/_build
+      - /usr/src/web/deps
