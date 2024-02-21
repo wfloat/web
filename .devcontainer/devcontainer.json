@@ -5,8 +5,6 @@
   "dockerComposeFile": ["../docker-compose.yaml", "docker-compose.dev.yaml"],
   "service": "web",
   "remoteUser": "containeruser",
-  // "containerUser": "nobody",
-  // "updateRemoteUserUID": true,
   "workspaceFolder": "/usr/src/web",
   "shutdownAction": "stopCompose",
   "customizations": {
@@ -17,7 +15,10 @@
         "JakeBecker.elixir-ls",
         "phoenixframework.phoenix",
         "bradlc.vscode-tailwindcss"
-      ]
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
     }
   },
   "features": {

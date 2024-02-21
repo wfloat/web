@@ -20,13 +20,15 @@ ARG DEBIAN_VERSION=bullseye-20240130-slim
 
 FROM hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}
 
+ARG MIX_ENV="prod"
+
 ARG USERNAME=containeruser
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 # Create the user
 RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID --create-home $USERNAME --shell /bin/bash \
     # [Optional] Add sudo support. Omit if you don't need to install software after connecting.
     && apt-get update \
     && apt-get install -y sudo \
@@ -40,12 +42,13 @@ RUN apt-get update -y && apt-get install -y build-essential git \
 # prepare build dir
 WORKDIR /usr/src/web
 
+# set build ENV
+ENV MIX_ENV=${MIX_ENV}
+
 # install hex + rebar
 RUN mix local.hex --force && \
   mix local.rebar --force
 
-# set build ENV
-ENV MIX_ENV="prod"
 
 # install mix dependencies
 COPY mix.exs mix.lock ./
@@ -86,6 +89,8 @@ RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
+
+RUN chown -R containeruser:containeruser _build deps
 
 USER containeruser
 
