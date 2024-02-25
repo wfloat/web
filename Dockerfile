@@ -35,9 +35,12 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
-# install build dependencies
-RUN apt-get update -y && apt-get install -y build-essential git \
-  && apt-get clean && rm -f /var/lib/apt/lists/*_*
+# install base dependencies
+RUN apt-get update -y && \
+    apt-get install -y build-essential git inotify-tools libstdc++6 openssl libncurses5 locales ca-certificates && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*_*
+
 
 # prepare build dir
 WORKDIR /usr/src/web
@@ -78,10 +81,6 @@ COPY config/runtime.exs config/
 
 COPY rel rel
 RUN mix release
-
-RUN apt-get update -y && \
-  apt-get install -y libstdc++6 openssl libncurses5 locales ca-certificates \
-  && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 # Set the locale
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
