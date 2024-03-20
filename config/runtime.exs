@@ -54,15 +54,14 @@ if config_env() == :prod do
   #
   # To get SSL working, you will need to add the `https` key
   # to your endpoint configuration:
-  #
-  #     config :wfloat, WfloatWeb.Endpoint,
-  #       https: [
-  #         ...,
-  #         port: 443,
-  #         cipher_suite: :strong,
-  #         keyfile: System.get_env("SOME_APP_SSL_KEY_PATH"),
-  #         certfile: System.get_env("SOME_APP_SSL_CERT_PATH")
-  #       ]
+
+      config :wfloat, WfloatWeb.Endpoint,
+        https: [
+          port: 443,
+          cipher_suite: :strong,
+          keyfile: System.get_env("SSL_KEY_PATH"),
+          certfile: System.get_env("SSL_CERT_PATH")
+        ]
   #
   # The `cipher_suite` is set to `:strong` to support only the
   # latest and more secure SSL ciphers. This means old browsers

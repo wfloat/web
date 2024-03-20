@@ -8,5 +8,8 @@ services:
     environment:
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}
       - PORT=${PORT}
+      - SSL_KEY_PATH=${SSL_KEY_PATH}
+      - SSL_CERT_PATH=${SSL_CERT_PATH}
+      - PHX_HOST=${PHX_HOST}
     ports:
       - 4001:4001
