@@ -1,3 +1,4 @@
+```typescript
 export enum Weekdays {
     Friday = "Friday",
     Monday = "Monday",
@@ -7,7 +8,9 @@ export enum Weekdays {
     Tuesday = "Tuesday",
     Wednesday = "Wednesday",
 }
+```
 
+```json
 {
   "type": "object",
   "properties": {
@@ -37,15 +40,18 @@ export enum Weekdays {
     "weekdays"
   ]
 }
+```
 
 ------------------------------------------------
 
-
+```typescript
 export enum Enum {
     Bar = "bar",
     Foo = "foo",
 }
+```
 
+```json
 {
   "type": "object",
   "additionalProperties": false,
@@ -57,15 +63,17 @@ export enum Enum {
   },
   "required": ["enum"]
 }
-
+```
 ------------------------------------------------
-
+```typescript
 export enum FooEnum {
     A = "a",
     B = "b",
     C = "c",
 }
+```
 
+```json
 {
     "type": "object",
     "properties": {
@@ -84,18 +92,22 @@ export enum FooEnum {
         "foo"
     ]
 }
+```
 
 --------------------------------------
 ruby
 
+```ruby
 module FooEnum
   A = "a"
   B = "b"
   C = "c"
 end
+```
 
 ---------------------------------------
 
+```ruby
 module Types
   include Dry.Types(default: :nominal)
 
@@ -113,9 +125,10 @@ module OtherArr
   Foo = "foo"
   If  = "if"
 end
+```
 
 
-
+```ruby
   def self.from_json!(json)
     from_dynamic!(JSON.parse(json))
   end
@@ -144,6 +157,34 @@ module Lvc
   Lawful  = "lawful"
   Neutral = "neutral"
 end
-
+```
 ----------------------------------
+```ruby
+module Types
+  include Dry.Types(default: :nominal)
 
+  Hash     = Strict::Hash
+  String   = Strict::String
+  Weekdays = Strict::String.enum("Friday", "Monday", "Saturday", "Sunday", "Thursday", "Tuesday", "Wednesday")
+end
+
+module Weekdays
+  Friday    = "Friday"
+  Monday    = "Monday"
+  Saturday  = "Saturday"
+  Sunday    = "Sunday"
+  Thursday  = "Thursday"
+  Tuesday   = "Tuesday"
+  Wednesday = "Wednesday"
+end
+
+class TempMulti < Dry::Struct
+  attribute :weekdays, Types::Weekdays
+
+  def self.from_dynamic!(d)
+    d = Types::Hash[d]
+    new(
+      weekdays: d.fetch("weekdays"),
+    )
+  end
+```
