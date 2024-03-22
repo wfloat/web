@@ -1,4 +1,15 @@
+# https://github.com/BretFisher/node-docker-good-defaults/blob/main/docker-compose.yml
 version: '3.8'
+
+x-function: &rvc-common-settings
+  image: mitchsayre/rvc:latest
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [ gpu ]
 
 services:
   web:
@@ -8,8 +19,110 @@ services:
     environment:
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}
       - PORT=${PORT}
-      - SSL_KEY_PATH=${SSL_KEY_PATH}
-      - SSL_CERT_PATH=${SSL_CERT_PATH}
-      - PHX_HOST=${PHX_HOST}
+      # - SSL_KEY_PATH=${SSL_KEY_PATH}
+      # - SSL_CERT_PATH=${SSL_CERT_PATH}
+      # - PHX_HOST=${PHX_HOST}
     ports:
       - 4001:4001
+    network_mode: host
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: ../api
+      dockerfile: ../api/Dockerfile
+    environment:
+      - POSTGRES_CONNECTION_URL=${POSTGRES_CONNECTION_URL}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PW=${POSTGRES_PW}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_SERVICE_NAME=${POSTGRES_SERVICE_NAME}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_SPEECH_BUCKET_NAME=${AWS_SPEECH_BUCKET_NAME}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+    ports:
+      - 4000:4000
+    network_mode: host
+    volumes:
+      - /usr/src/api/node_modules
+    depends_on:
+      - postgres
+      - pgadmin
+      - tts
+      - rvc0
+      - rvc1
+      - rvc2
+
+  postgres:
+    container_name: postgres
+    image: postgres:16.1
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: always
+
+  pgadmin:
+    build:
+      context: .
+      dockerfile: Dockerfile.pgadmin
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PORT=5432
+      - POSTGRES_SERVICE_NAME=${POSTGRES_SERVICE_NAME}
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PW}
+    ports:
+      - '5050:80'
+    restart: always
+    depends_on:
+      - postgres
+
+  tts:
+    container_name: tts
+    image: mitchsayre/tts:latest
+    environment:
+      - AZURE_SPEECH_KEY=${AZURE_SPEECH_KEY}
+      - AZURE_SPEECH_REGION=${AZURE_SPEECH_REGION}
+    ports:
+      - 5379:5379
+
+  rvc0:
+    <<: *rvc-common-settings
+    container_name: rvc0
+    volumes:
+      - ../packages/rvc-gradio-server/shared/weights:/app/assets/weights
+      - ../packages/rvc-gradio-server/shared:/app/shared
+      - ../packages/rvc-gradio-server/tmp/rvc0:/tmp/gradio
+    ports:
+      - 7865:7865
+  rvc1:
+    <<: *rvc-common-settings
+    container_name: rvc1
+    volumes:
+      - ../packages/rvc-gradio-server/shared/weights:/app/assets/weights
+      - ../packages/rvc-gradio-server/shared:/app/shared
+      - ../packages/rvc-gradio-server/tmp/rvc1:/tmp/gradio
+    ports:
+      - 7866:7865
+  rvc2:
+    <<: *rvc-common-settings
+    container_name: rvc2
+    volumes:
+      - ../packages/rvc-gradio-server/shared/weights:/app/assets/weights
+      - ../packages/rvc-gradio-server/shared:/app/shared
+      - ../packages/rvc-gradio-server/tmp/rvc2:/tmp/gradio
+    ports:
+      - 7867:7865
+
+volumes:
+  postgres-data:

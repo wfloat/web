@@ -16,8 +16,8 @@ defmodule WfloatWeb.Router do
 
   scope "/", WfloatWeb do
     pipe_through :browser
-
-    get "/", PageController, :home
+    live "/", CreateTTSLive
+    # get "/", PageController, :home
   end
 
   # Other scopes may use custom stacks.

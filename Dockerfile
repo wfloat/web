@@ -37,7 +37,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
 
 # install base dependencies
 RUN apt-get update -y && \
-    apt-get install -y build-essential git inotify-tools libstdc++6 openssl libncurses5 locales ca-certificates && \
+    apt-get install -y curl build-essential git inotify-tools libstdc++6 openssl libncurses5 locales ca-certificates && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*_*
 

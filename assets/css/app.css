@@ -3,3 +3,19 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+
+.tts-container {
+    /* background-color: orange; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.audio-container {
+    width: 100%;
+    /* background-color: orange; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
