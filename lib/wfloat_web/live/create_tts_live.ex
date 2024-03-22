@@ -16,6 +16,8 @@ defmodule WfloatWeb.CreateTTSLive do
     changeset = TextToSpeech.changeset(%TextToSpeech{}, %{})
     socket = assign(socket, form: changeset)
     socket = assign(socket, :message, nil)
+    socket = assign(socket, :message_content, nil)
+    socket = assign(socket, :character_id, nil)
     socket = assign(socket, :auth_token, nil)
     socket = assign(socket, :output_url, nil)
     {:ok, assign(socket, text: "Hello, World!")}
@@ -25,7 +27,7 @@ defmodule WfloatWeb.CreateTTSLive do
     # Now you have character_id and message_content from the form
     # Add your code here to process these values
     IO.puts("Character ID: #{character_id}")
-    IO.puts("Message Content: #{message_content}")
+    # IO.puts("Message Content: #{message_content}")
 
     auth_token = socket.assigns[:auth_token]
     IO.inspect(auth_token, label: "auth")
@@ -49,20 +51,17 @@ defmodule WfloatWeb.CreateTTSLive do
     )
 
       new_socket = case response do
-      {:ok, %Neuron.Response{body: %{"data" => data}}} ->
-        # output_url = response["body"]["data"]["createTextToSpeech"]["outputUrl"]
-        # output_url = data["createTextToSpeech"]["outputUrl"]
-        # Now id is a string that you can use safely
-        # IO.puts(output_url)
-        assign(socket, :output_url, data["createTextToSpeech"]["outputUrl"])
-        # IO.inspect(response, label: "GraphQL Response")
-        # assign(socket, :audio_url, output_url)
-      {:error, _error} ->
-        # IO.puts("Error")
-        # IO.inspect(response, label: "GraphQL Error")
-        assign(socket, :output_url, nil)
-        # assign(socket, :audio_url, nil)
-    end
+        {:ok, %Neuron.Response{body: %{"data" => data}}} ->
+          output_url = data["createTextToSpeech"]["outputUrl"]
+          IO.puts(output_url)
+          new_socket = socket
+          |> assign(:message, "hello")
+          |> assign(:message_content, message_content)
+          |> assign(:character_id, character_id)
+          |> assign(:output_url, output_url)
+        {:error, _error} ->
+          new_socket = assign(socket, :output_url, nil)
+      end
 
 
     {:noreply, new_socket}

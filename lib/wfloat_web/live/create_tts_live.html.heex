@@ -2,39 +2,132 @@
 <div class="tts-container">
 <%!-- <button phx-click="execute_action">Click me</button> --%>
 
-<input placeholder="Enter your API access key" class="mb-5" type="text" phx-keyup="validate_auth_key" />
+<input placeholder="Enter your API access key" class="mb-5" type="text" phx-keyup="validate_auth_key" value={@auth_token} />
 
 <%= if @auth_token do %>
 <form phx-submit="process_message" class="tts-container">
-  <select name="character_id" class="mb-5" id="character-select">
-    <option value="" disabled selected hidden>Select a person</option>
-    <option value="8b3342f4-659c-41f8-a33f-e43718567bf3">Anakin Skywalker</option>
-    <option value="985900ac-b788-4ce0-84df-9d76a611fe26">Ash Ketchum</option>
-    <option value="9a582133-c8d9-41c5-964c-bf851a70f71e">Bart Simpson</option>
-    <option value="4ef38c24-25dd-4866-9b50-6a47ff94dbbe">Batman (Kevin Conroy)</option>
-    <option value="25980860-8fe2-4ef0-bcf4-262b9b76f491">Ben Tennyson</option>
-    <option value="9f6375e5-16a5-461f-9bae-dc42f832843a">Carl Wheezer</option>
-    <option value="cf5215c4-1bd1-4265-986a-64bd61e24939">Darth Vader</option>
-    <option value="be270711-aaed-40f9-b63c-c2e05bfaef19">Eric Cartman</option>
-    <option value="7a8cfeaa-fe7e-4e27-afb5-c9570c12c576">Future Trunks</option>
-    <option value="7a5358a1-6d6a-4652-a323-dd40219021c1">Gwen Stacy</option>
-    <option value="05fafec1-b0ec-47af-92dd-f1e2352f9dba">Hayley Williams</option>
-    <option value="90d11dfc-a0ed-4f29-9a73-775e69f1d2d6">Jack Black</option>
-    <option value="34720d10-3ed3-464d-8a96-fd39369c624a">Katy Perry</option>
-    <option value="fb8acbe8-35f0-4698-9e01-7cf446e34e68">Kermit the Frog</option>
-    <option value="c897df22-3b7b-4b9e-9fa9-00abf62f14c8">Krillin</option>
-    <option value="7858fbf0-8c85-419f-ab30-6343acaefc23">Master Chief</option>
-    <option value="78cf79ec-9b69-471a-863e-fe9c2ed5237c">Naruto Uzumaki</option>
-    <option value="76d7e1fe-4e7b-47d4-8c42-148ebb8f4b18">Nicki Minaj</option>
-    <option value="11a37926-9075-4873-9bd7-ef71c49b524e">Phineas Flynn</option>
-    <option value="a170fdcc-49bd-440c-b52b-57f0ec4a4fc6">Rick Sanchez</option>
-    <option value="39782214-cbf9-4411-8917-133df86e4832">Sonic the Hedgehog</option>
-    <option value="d78842d9-4ff6-4148-bf97-83e46144ff0a">SpongeBob SquarePants</option>
-    <option value="bbb495be-3a63-4f35-ba01-9380d85ddb29">Taylor Swift</option>
-    <option value="d6f8c1a5-e3af-4ab1-a1b5-b429eb268c59">Tyler, The Creator</option>
-  </select>
+<select name="character_id" class="mb-5" id="character-select">
+    <option value="" disabled selected hidden >Select a person</option>
+  <option value="" disabled hidden>Select a person</option>
+  <option value="8b3342f4-659c-41f8-a33f-e43718567bf3"
+          selected={@character_id == "8b3342f4-659c-41f8-a33f-e43718567bf3"}>
+    Anakin Skywalker
+  </option>
+  <option value="985900ac-b788-4ce0-84df-9d76a611fe26"
+          selected={@character_id == "985900ac-b788-4ce0-84df-9d76a611fe26"}>
+    Ash Ketchum
+  </option>
 
-    <textarea name="message_content" class="mb-5" class="border rounded-md" placeholder="Enter a message"></textarea>
+    <option value="9a582133-c8d9-41c5-964c-bf851a70f71e"
+          selected={@character_id == "9a582133-c8d9-41c5-964c-bf851a70f71e"}>
+    Bart Simpson
+  </option>
+
+      <option value="4ef38c24-25dd-4866-9b50-6a47ff94dbbe"
+          selected={@character_id == "4ef38c24-25dd-4866-9b50-6a47ff94dbbe"}>
+    Batman (Kevin Conroy)
+  </option>
+
+
+        <option value="25980860-8fe2-4ef0-bcf4-262b9b76f491"
+          selected={@character_id == "25980860-8fe2-4ef0-bcf4-262b9b76f491"}>
+    Ben Tennyson
+  </option>
+
+          <option value="9f6375e5-16a5-461f-9bae-dc42f832843a"
+          selected={@character_id == "9f6375e5-16a5-461f-9bae-dc42f832843a"}>
+    Carl Wheezer
+  </option>
+
+            <option value="cf5215c4-1bd1-4265-986a-64bd61e24939"
+          selected={@character_id == "cf5215c4-1bd1-4265-986a-64bd61e24939"}>
+    Darth Vader
+  </option>
+
+              <option value="be270711-aaed-40f9-b63c-c2e05bfaef19"
+          selected={@character_id == "be270711-aaed-40f9-b63c-c2e05bfaef19"}>
+    Eric Cartman
+  </option>
+                <option value="7a8cfeaa-fe7e-4e27-afb5-c9570c12c576"
+          selected={@character_id == "7a8cfeaa-fe7e-4e27-afb5-c9570c12c576"}>
+    Future Trunks
+  </option>
+                  <option value="7a5358a1-6d6a-4652-a323-dd40219021c1"
+          selected={@character_id == "7a5358a1-6d6a-4652-a323-dd40219021c1"}>
+    Gwen Stacy
+  </option>
+                    <option value="05fafec1-b0ec-47af-92dd-f1e2352f9dba"
+          selected={@character_id == "05fafec1-b0ec-47af-92dd-f1e2352f9dba"}>
+    Hayley Williams
+  </option>
+
+                    <option value="90d11dfc-a0ed-4f29-9a73-775e69f1d2d6"
+          selected={@character_id == "90d11dfc-a0ed-4f29-9a73-775e69f1d2d6"}>
+    Jack Black
+  </option>
+
+                    <option value="34720d10-3ed3-464d-8a96-fd39369c624a"
+          selected={@character_id == "34720d10-3ed3-464d-8a96-fd39369c624a"}>
+    Katy Perry
+  </option>
+
+                      <option value="fb8acbe8-35f0-4698-9e01-7cf446e34e68"
+          selected={@character_id == "fb8acbe8-35f0-4698-9e01-7cf446e34e68"}>
+    Kermit the Frog
+  </option>
+                        <option value="c897df22-3b7b-4b9e-9fa9-00abf62f14c8"
+          selected={@character_id == "c897df22-3b7b-4b9e-9fa9-00abf62f14c8"}>
+    Krillin
+  </option>
+
+                          <option value="7858fbf0-8c85-419f-ab30-6343acaefc23"
+          selected={@character_id == "7858fbf0-8c85-419f-ab30-6343acaefc23"}>
+    Master Chief
+  </option>
+
+                            <option value="78cf79ec-9b69-471a-863e-fe9c2ed5237c"
+          selected={@character_id == "78cf79ec-9b69-471a-863e-fe9c2ed5237c"}>
+    Naruto Uzumaki
+  </option>
+
+                              <option value="76d7e1fe-4e7b-47d4-8c42-148ebb8f4b18"
+          selected={@character_id == "76d7e1fe-4e7b-47d4-8c42-148ebb8f4b18"}>
+    Nicki Minaj
+  </option>
+
+                                <option value="11a37926-9075-4873-9bd7-ef71c49b524e"
+          selected={@character_id == "11a37926-9075-4873-9bd7-ef71c49b524e"}>
+    Phineas Flynn
+  </option>
+
+                                  <option value="a170fdcc-49bd-440c-b52b-57f0ec4a4fc6"
+          selected={@character_id == "a170fdcc-49bd-440c-b52b-57f0ec4a4fc6"}>
+    Rick Sanchez
+  </option>
+
+                                    <option value="39782214-cbf9-4411-8917-133df86e4832"
+          selected={@character_id == "39782214-cbf9-4411-8917-133df86e4832"}>
+    Sonic the Hedgehog
+  </option>
+
+                                     <option value="d78842d9-4ff6-4148-bf97-83e46144ff0a"
+          selected={@character_id == "d78842d9-4ff6-4148-bf97-83e46144ff0a"}>
+    SpongeBob SquarePants
+  </option>
+
+                                       <option value="bbb495be-3a63-4f35-ba01-9380d85ddb29"
+          selected={@character_id == "bbb495be-3a63-4f35-ba01-9380d85ddb29"}>
+    Taylor Swift
+  </option>
+
+                                         <option value="d6f8c1a5-e3af-4ab1-a1b5-b429eb268c59"
+          selected={@character_id == "d6f8c1a5-e3af-4ab1-a1b5-b429eb268c59"}>
+    Tyler, The Creator
+  </option>
+
+</select>
+
+    <textarea name="message_content" class="mb-5" class="border rounded-md" placeholder="Enter a message"><%= @message_content %></textarea>
   <button class="mb-5 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700">
     Submit
   </button>
@@ -42,16 +135,13 @@
 <% end %>
 </div>
 
-    <%= if @output_url do %>
-    <div class="audio-container">
-          <audio controls="controls">
-        <source src={@output_url} type="audio/mpeg" />
+<%= if @output_url do %>
+<div class="audio-container" id="audio-container">
+    <audio src={@output_url}controls="controls">
+        <source id={@output_url} src={@output_url} type="audio/mpeg" />
         Your browser does not support the audio element.
-      </audio>
-    </div>
-
-    <% else %>
-  <%!-- <p>Error loading audio</p> --%>
+    </audio>
+</div>
 <% end %>
 
 <%!-- <%= if @message do %>
