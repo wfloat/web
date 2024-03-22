@@ -6,7 +6,7 @@
 
 <%= if @auth_token do %>
 <form phx-submit="process_message" class="tts-container">
-<select name="character_id" class="mb-5" id="character-select">
+<select phx-change="select_character" name="character_id" class="mb-5" id="character-select">
     <option value="" disabled selected hidden >Select a person</option>
   <option value="" disabled hidden>Select a person</option>
   <option value="8b3342f4-659c-41f8-a33f-e43718567bf3"
@@ -127,6 +127,7 @@
 
 </select>
 
+    <a href="#" phx-click="autofill_weather" class="mb-1" style="color: rgb(253,79,0);">Auto fill</a>
     <textarea name="message_content" class="mb-5" class="border rounded-md" placeholder="Enter a message"><%= @message_content %></textarea>
   <button class="mb-5 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700">
     Submit

@@ -23,6 +23,21 @@ defmodule WfloatWeb.CreateTTSLive do
     {:ok, assign(socket, text: "Hello, World!")}
   end
 
+  def handle_event("autofill_weather", _params, socket) do
+    weather_report = "Today's weather is sunny with a high of 75 degrees and a low of 65."
+    new_socket = assign(socket, :message_content, weather_report)
+    {:noreply, new_socket}
+  end
+
+  def handle_event("select_character", %{"character_id" => character_id}, socket) do
+    # Your logic here, for example:
+
+    # Now you can use character_id and message_content as needed
+    # Update the socket or perform actions
+    new_socket = assign(socket, :character_id, character_id)
+    {:noreply, new_socket}
+end
+
   def handle_event("process_message", %{"character_id" => character_id, "message_content" => message_content}, socket) do
     # Now you have character_id and message_content from the form
     # Add your code here to process these values
