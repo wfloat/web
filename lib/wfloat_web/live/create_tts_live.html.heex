@@ -1,8 +1,9 @@
 <%!-- <div>hello world!</div> --%>
 <div class="tts-container">
 <%!-- <button phx-click="execute_action">Click me</button> --%>
-
-<input placeholder="Enter your API access key" class="mb-5" type="text" phx-keyup="validate_auth_key" value={@auth_token} />
+<form phx-change="validate_auth_key" class="tts-container">
+<input placeholder="Enter your API access key" name="auth_token" class="mb-5" type="text" value={@auth_token} />
+</form>
 
 <%= if @auth_token do %>
 <form phx-submit="process_message" class="tts-container">

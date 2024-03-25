@@ -82,7 +82,7 @@ end
     {:noreply, new_socket}
   end
 
-  def handle_event("validate_auth_key", %{"value" => auth_token}, socket) do
+  def handle_event("validate_auth_key", %{"auth_token" => auth_token}, socket) do
     response = Neuron.query("""
     query VoiceModels($first: Int) {
       VoiceModels(first: $first) {
