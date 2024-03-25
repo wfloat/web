@@ -21,7 +21,7 @@ services:
       - PORT=${PORT}
       # - SSL_KEY_PATH=${SSL_KEY_PATH}
       # - SSL_CERT_PATH=${SSL_CERT_PATH}
-      # - PHX_HOST=${PHX_HOST}
+      - PHX_HOST=${PHX_HOST}
     ports:
       - 4001:4001
     network_mode: host
